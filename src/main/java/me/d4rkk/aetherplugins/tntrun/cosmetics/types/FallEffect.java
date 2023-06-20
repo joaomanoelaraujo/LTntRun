@@ -13,7 +13,7 @@ import me.d4rkk.aetherplugins.tntrun.Main;
 import me.d4rkk.aetherplugins.tntrun.container.SelectedContainer;
 import me.d4rkk.aetherplugins.tntrun.cosmetics.Cosmetic;
 import me.d4rkk.aetherplugins.tntrun.cosmetics.CosmeticType;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
 import dev.slickcollections.kiwizin.utils.BukkitUtils;
 import dev.slickcollections.kiwizin.utils.StringUtils;
 import dev.slickcollections.kiwizin.utils.enums.EnumRarity;
@@ -99,7 +99,7 @@ public class FallEffect extends Cosmetic implements Listener {
     }
     Player player = (Player) evt.getEntity();
     Profile profile = Profile.getProfile(player.getName());
-    AbstractSkyWars game = profile.getGame(AbstractSkyWars.class);
+    TnTGameAb game = profile.getGame(TnTGameAb.class);
     if (player.getNoDamageTicks() < 1 && game != null && game.getState() == GameState.EMJOGO
         && !game.isSpectator(player) && isSelected(profile) && canBuy(player) && has(profile)
         && evt.getCause() != null && evt.getCause() == EntityDamageEvent.DamageCause.FALL) {

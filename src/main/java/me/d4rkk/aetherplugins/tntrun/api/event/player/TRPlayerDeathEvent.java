@@ -5,7 +5,7 @@ import dev.slickcollections.kiwizin.game.Game;
 import dev.slickcollections.kiwizin.game.GameTeam;
 import dev.slickcollections.kiwizin.player.Profile;
 import me.d4rkk.aetherplugins.tntrun.api.TREvent;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
 import org.bukkit.event.Cancellable;
 
 public class TRPlayerDeathEvent extends TREvent implements Cancellable {
@@ -14,7 +14,7 @@ public class TRPlayerDeathEvent extends TREvent implements Cancellable {
   private final Profile profile;
   private final Profile killer;
 
-  public TRPlayerDeathEvent(AbstractSkyWars game, Profile profile, Profile killer) {
+  public TRPlayerDeathEvent(TnTGameAb game, Profile profile, Profile killer) {
     this.game = game;
     this.profile = profile;
     this.killer = killer;

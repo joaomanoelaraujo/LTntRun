@@ -15,12 +15,10 @@ import dev.slickcollections.kiwizin.player.scoreboard.scroller.ScoreboardScrolle
 import dev.slickcollections.kiwizin.plugin.config.KConfig;
 import me.d4rkk.aetherplugins.tntrun.Language;
 import me.d4rkk.aetherplugins.tntrun.Main;
-import me.d4rkk.aetherplugins.tntrun.container.SelectedContainer;
-import me.d4rkk.aetherplugins.tntrun.cosmetics.CosmeticType;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
-import me.d4rkk.aetherplugins.tntrun.game.SkyWarsTeam;
-import me.d4rkk.aetherplugins.tntrun.game.enums.SkyWarsMode;
-import me.d4rkk.aetherplugins.tntrun.game.object.SkyWarsLeague;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameTeam;
+import me.d4rkk.aetherplugins.tntrun.game.enums.TnTGameMode;
+import me.d4rkk.aetherplugins.tntrun.game.object.TnTRunLeague;
 import me.d4rkk.aetherplugins.tntrun.hook.hotbar.SWHotbarActionType;
 import me.d4rkk.aetherplugins.tntrun.hook.protocollib.HologramAdapter;
 import dev.slickcollections.kiwizin.utils.StringUtils;
@@ -34,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.logging.Level;
 
-public class SWCoreHook {
+public class TNTCoreHook {
   
   public static void setupHook() {
     Core.minigame = "Sky Wars";
@@ -79,12 +77,12 @@ public class SWCoreHook {
       checkAchievements(profile);
     }
     Player player = profile.getPlayer();
-    AbstractSkyWars game = profile.getGame(AbstractSkyWars.class);
+    TnTGameAb game = profile.getGame(TnTGameAb.class);
     List<String> lines = game == null ?
         Language.scoreboards$lobby :
         game.getState() == GameState.AGUARDANDO ?
             Language.scoreboards$waiting :
-            (game.getMode() == SkyWarsMode.SOLO || game.getMode() == SkyWarsMode.RANKED ? Language.scoreboards$ingame$solo : Language.scoreboards$ingame$dupla);
+            (game.getMode() == TnTGameMode.SOLO || game.getMode() == TnTGameMode.RANKED ? Language.scoreboards$ingame$solo : Language.scoreboards$ingame$dupla);
     
     profile.setScoreboard(new KScoreboard() {
       @Override
@@ -99,7 +97,7 @@ public class SWCoreHook {
                     .replace("{mode}", game.getMode().getName())
                     .replace("{next_event}", game.getEvent())
                     .replace("{players}", StringUtils.formatNumber(game.getOnline()))
-                    .replace("{teams}", StringUtils.formatNumber(game.listTeams().stream().filter(SkyWarsTeam::isAlive).count()))
+                    .replace("{teams}", StringUtils.formatNumber(game.listTeams().stream().filter(TnTGameTeam::isAlive).count()))
                     .replace("{max_players}", StringUtils.formatNumber(game.getMaxPlayers()))
                     .replace("{time}", game.getTimer() == 46 ? Language.scoreboards$time$waiting : Language.scoreboards$time$starting.replace("{time}", StringUtils.formatNumber(game.getTimer())))
                     .replace("{kills}", StringUtils.formatNumber(game.getKills(player)))
@@ -110,7 +108,7 @@ public class SWCoreHook {
                     .replace("{ranking_3}", game.getTopKill(3));
           } else {
             line = PlaceholderAPI.setPlaceholders(player, line);
-            line = line.replace("%kCore_SkyWars_league%", SkyWarsLeague.getLeague(profile).getTag());
+            line = line.replace("%kCore_SkyWars_league%", TnTRunLeague.getLeague(profile).getTag());
           }
           
           this.add(15 - index, line);

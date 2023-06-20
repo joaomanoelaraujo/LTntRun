@@ -2,7 +2,7 @@ package me.d4rkk.aetherplugins.tntrun.listeners.player;
 
 import dev.slickcollections.kiwizin.player.Profile;
 import me.d4rkk.aetherplugins.tntrun.Main;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,7 +23,7 @@ public class PlayerDeathListener implements Listener {
       evt.setDroppedExp(0);
       player.setHealth(20.0);
 
-      AbstractSkyWars game = profile.getGame(AbstractSkyWars.class);
+      TnTGameAb game = profile.getGame(TnTGameAb.class);
       if (game == null) {
         evt.getDrops().clear();
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), profile::refresh, 3);

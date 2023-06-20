@@ -3,7 +3,7 @@ package me.d4rkk.aetherplugins.tntrun.menus;
 import dev.slickcollections.kiwizin.libraries.menu.UpdatablePlayerMenu;
 import dev.slickcollections.kiwizin.player.role.Role;
 import me.d4rkk.aetherplugins.tntrun.Main;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
 import dev.slickcollections.kiwizin.utils.BukkitUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,9 +19,9 @@ import java.util.Map;
 
 public class MenuSpectator extends UpdatablePlayerMenu {
   
-  private AbstractSkyWars game;
+  private TnTGameAb game;
   private Map<Integer, Player> map = new HashMap<>();
-  public MenuSpectator(Player player, AbstractSkyWars game) {
+  public MenuSpectator(Player player, TnTGameAb game) {
     super(player, "Jogadores", 3);
     this.game = game;
     

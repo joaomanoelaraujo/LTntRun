@@ -1,7 +1,7 @@
 package me.d4rkk.aetherplugins.tntrun.listeners.server;
 
 import dev.slickcollections.kiwizin.game.GameState;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBurnEvent;
@@ -14,7 +14,7 @@ public class ServerListener implements Listener {
   
   @EventHandler
   public void onBlockIgnite(BlockIgniteEvent evt) {
-    AbstractSkyWars game = AbstractSkyWars.getByWorldName(evt.getBlock().getWorld().getName());
+    TnTGameAb game = TnTGameAb.getByWorldName(evt.getBlock().getWorld().getName());
     if (game == null) {
       evt.setCancelled(true);
     } else if (game.getState() != GameState.EMJOGO) {
@@ -24,7 +24,7 @@ public class ServerListener implements Listener {
   
   @EventHandler
   public void onBlockBurn(BlockBurnEvent evt) {
-    AbstractSkyWars game = AbstractSkyWars.getByWorldName(evt.getBlock().getWorld().getName());
+    TnTGameAb game = TnTGameAb.getByWorldName(evt.getBlock().getWorld().getName());
     if (game == null) {
       evt.setCancelled(true);
     } else if (game.getState() != GameState.EMJOGO) {
@@ -39,7 +39,7 @@ public class ServerListener implements Listener {
   
   @EventHandler
   public void onEntityExplode(EntityExplodeEvent evt) {
-    AbstractSkyWars game = AbstractSkyWars.getByWorldName(evt.getEntity().getWorld().getName());
+    TnTGameAb game = TnTGameAb.getByWorldName(evt.getEntity().getWorld().getName());
     if (game == null) {
       evt.setCancelled(true);
     } else if (game.getState() != GameState.EMJOGO) {

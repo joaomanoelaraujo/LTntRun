@@ -2,7 +2,7 @@ package me.d4rkk.aetherplugins.tntrun.cmd;
 
 import dev.slickcollections.kiwizin.player.Profile;
 import me.d4rkk.aetherplugins.tntrun.Language;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -41,7 +41,7 @@ public class SpectateCommand extends Commands {
         }
         
         player.sendMessage(Language.lobby$npc$play$connect);
-        profile.getGame(AbstractSkyWars.class).spectate(player, target);
+        profile.getGame(TnTGameAb.class).spectate(player, target);
       }
     }
   }

@@ -7,7 +7,7 @@ import dev.slickcollections.kiwizin.player.enums.BloodAndGore;
 import dev.slickcollections.kiwizin.player.role.Role;
 import me.d4rkk.aetherplugins.tntrun.Language;
 import me.d4rkk.aetherplugins.tntrun.Main;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
 import dev.slickcollections.kiwizin.utils.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -26,9 +26,9 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 public class EntityListener implements Listener {
-  private AbstractSkyWars getSkyWarsGame(Player player) {
+  private TnTGameAb getSkyWarsGame(Player player) {
     Profile profile = Profile.getProfile(player.getName());
-    return profile.getGame(AbstractSkyWars.class);
+    return profile.getGame(TnTGameAb.class);
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
@@ -41,9 +41,9 @@ public class EntityListener implements Listener {
     if (evt.getEntity() instanceof Player) {
       Player player = (Player) evt.getEntity();
 
-     AbstractSkyWars game;
+     TnTGameAb game;
       Profile profile = Profile.getProfile(player.getName());
-      if (profile == null || (game = profile.getGame(AbstractSkyWars.class)) == null || game.getState() != GameState.EMJOGO || game.isSpectator(player)) {
+      if (profile == null || (game = profile.getGame(TnTGameAb.class)) == null || game.getState() != GameState.EMJOGO || game.isSpectator(player)) {
         evt.setCancelled(true);
       } else {
         GameTeam team = game.getTeam(player);
@@ -107,7 +107,7 @@ public class EntityListener implements Listener {
 
       Profile profile = Profile.getProfile(player.getName());
       if (profile != null) {
-        AbstractSkyWars game = profile.getGame(AbstractSkyWars.class);
+        TnTGameAb game = profile.getGame(TnTGameAb.class);
         if (game == null) {
           evt.setCancelled(true);
         } else {
@@ -134,7 +134,7 @@ public class EntityListener implements Listener {
     if (evt.getEntity() instanceof Player) {
       Profile profile = Profile.getProfile(evt.getEntity().getName());
       if (profile != null) {
-        AbstractSkyWars game = profile.getGame(AbstractSkyWars.class);
+        TnTGameAb game = profile.getGame(TnTGameAb.class);
         if (game != null) {
           evt.setCancelled(game.getState() != GameState.EMJOGO || game.isSpectator((Player) evt.getEntity()));
         }

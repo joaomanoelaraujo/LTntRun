@@ -22,18 +22,18 @@ import me.d4rkk.aetherplugins.tntrun.api.event.player.TRPlayerDeathEvent;
 import me.d4rkk.aetherplugins.tntrun.container.SelectedContainer;
 import me.d4rkk.aetherplugins.tntrun.cosmetics.CosmeticType;
 import me.d4rkk.aetherplugins.tntrun.cosmetics.types.*;
-import me.d4rkk.aetherplugins.tntrun.game.enums.SkyWarsMode;
+import me.d4rkk.aetherplugins.tntrun.game.enums.TnTGameMode;
 import me.d4rkk.aetherplugins.tntrun.game.events.AnnounceEvent;
 import me.d4rkk.aetherplugins.tntrun.game.interfaces.LoadCallback;
-import me.d4rkk.aetherplugins.tntrun.game.object.SkyWarsBlock;
-import me.d4rkk.aetherplugins.tntrun.game.object.SkyWarsConfig;
-import me.d4rkk.aetherplugins.tntrun.game.object.SkyWarsTask;
+import me.d4rkk.aetherplugins.tntrun.game.object.TnTGameBlock;
+import me.d4rkk.aetherplugins.tntrun.game.object.TnTGameConfig;
+import me.d4rkk.aetherplugins.tntrun.game.object.TnTGameTask;
 import me.d4rkk.aetherplugins.tntrun.tagger.TagUtils;
 import dev.slickcollections.kiwizin.utils.BukkitUtils;
 import dev.slickcollections.kiwizin.utils.CubeID;
 import dev.slickcollections.kiwizin.utils.StringUtils;
 import dev.slickcollections.kiwizin.utils.enums.EnumSound;
-import me.d4rkk.aetherplugins.tntrun.hook.SWCoreHook;
+import me.d4rkk.aetherplugins.tntrun.hook.TNTCoreHook;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -53,32 +53,32 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
+public abstract class TnTGameAb implements Game<TnTGameTeam> {
   
   public static final KLogger LOGGER = ((KLogger) Main.getInstance().getLogger()).getModule("GAME");
-  public static final List<AbstractSkyWars> QUEUE = new ArrayList<>();
+  public static final List<TnTGameAb> QUEUE = new ArrayList<>();
   private static final SimpleDateFormat SDF = new SimpleDateFormat("mm:ss");
-  private static final Map<String, AbstractSkyWars> GAMES = new HashMap<>();
+  private static final Map<String, TnTGameAb> GAMES = new HashMap<>();
   private String name;
-  private SkyWarsConfig config;
+  private TnTGameConfig config;
   private int timer;
   private GameState state;
-  private SkyWarsTask task;
+  private TnTGameTask task;
   private List<UUID> players;
   private List<UUID> spectators;
   private Map<String, Integer> points;
   private Map<String, Integer> kills;
-  private final Map<String, SkyWarsBlock> blocks = new HashMap<>();
+  private final Map<String, TnTGameBlock> blocks = new HashMap<>();
   private List<Map.Entry<String, Integer>> topKills = new ArrayList<>();
   private final Map<String, Object[]> streak = new HashMap<>();
-  private Map.Entry<Integer, SkyWarsEvent> event;
-  private Map.Entry<Integer, SkyWarsEvent> nextEvent;
+  private Map.Entry<Integer, TnTGameEvent> event;
+  private Map.Entry<Integer, TnTGameEvent> nextEvent;
   
-  public AbstractSkyWars(String name, LoadCallback callback) {
+  public TnTGameAb(String name, LoadCallback callback) {
     this.name = name;
     this.timer = Language.options$start$waiting + 1;
-    this.task = new SkyWarsTask(this);
-    this.config = new SkyWarsConfig(this);
+    this.task = new TnTGameTask(this);
+    this.config = new TnTGameConfig(this);
     this.config.setupSpawns();
     this.state = GameState.AGUARDANDO;
     this.players = new ArrayList<>();
@@ -91,7 +91,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
       if (config.contains("dataBlocks")) {
         for (String blockdata : config.getStringList("dataBlocks")) {
           blocks.put(blockdata.split(" : ")[0],
-              new SkyWarsBlock(Material.matchMaterial(blockdata.split(" : ")[1].split(", ")[0]), Byte.parseByte(blockdata.split(" : ")[1].split(", ")[1])));
+              new TnTGameBlock(Material.matchMaterial(blockdata.split(" : ")[1].split(", ")[0]), Byte.parseByte(blockdata.split(" : ")[1].split(", ")[1])));
         }
       } else {
         this.state = GameState.ENCERRADO;
@@ -102,7 +102,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
     }
   }
   
-  public static void addToQueue(AbstractSkyWars game) {
+  public static void addToQueue(TnTGameAb game) {
     if (QUEUE.contains(game)) {
       return;
     }
@@ -111,7 +111,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
   }
   
   public static void setupGames() {
-    SkyWarsEvent.setupEvents();
+    TnTGameEvent.setupEvents();
     new ArenaRollbackerTask().runTaskTimer(Main.getInstance(), 0, Language.options$regen$world_reload ? 100 : 1);
     
     File ymlFolder = new File("plugins/kSkyWars/arenas");
@@ -142,7 +142,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
         throw new IllegalArgumentException("Backup do mapa nao encontrado para a arena \"" + yamlFile.getName() + "\"");
       }
       
-      SkyWarsMode mode = SkyWarsMode.fromName(Main.getInstance().getConfig("arenas", arenaName).getString("mode"));
+      TnTGameMode mode = TnTGameMode.fromName(Main.getInstance().getConfig("arenas", arenaName).getString("mode"));
       if (mode == null) {
         throw new IllegalArgumentException("Modo do mapa \"" + yamlFile.getName() + "\" nao e valido");
       }
@@ -153,14 +153,14 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
     }
   }
   
-  public static AbstractSkyWars getByWorldName(String worldName) {
+  public static TnTGameAb getByWorldName(String worldName) {
     return GAMES.get(worldName);
   }
   
-  public static int getWaiting(SkyWarsMode mode) {
+  public static int getWaiting(TnTGameMode mode) {
     int waiting = 0;
-    List<AbstractSkyWars> games = listByMode(mode);
-    for (AbstractSkyWars game : games) {
+    List<TnTGameAb> games = listByMode(mode);
+    for (TnTGameAb game : games) {
       if (game.getState() != GameState.EMJOGO) {
         waiting += game.getOnline();
       }
@@ -169,10 +169,10 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
     return waiting;
   }
   
-  public static int getPlaying(SkyWarsMode mode) {
+  public static int getPlaying(TnTGameMode mode) {
     int playing = 0;
-    List<AbstractSkyWars> games = listByMode(mode);
-    for (AbstractSkyWars game : games) {
+    List<TnTGameAb> games = listByMode(mode);
+    for (TnTGameAb game : games) {
       if (game.getState() == GameState.EMJOGO) {
         playing += game.getOnline();
       }
@@ -181,11 +181,11 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
     return playing;
   }
   
-  public static AbstractSkyWars findRandom(SkyWarsMode mode) {
-    List<AbstractSkyWars> games = GAMES.values().stream().filter(game -> game.getMode().equals(mode)
+  public static TnTGameAb findRandom(TnTGameMode mode) {
+    List<TnTGameAb> games = GAMES.values().stream().filter(game -> game.getMode().equals(mode)
         && game.getState().canJoin() && game.getOnline() < game.getMaxPlayers())
         .sorted((g1, g2) -> Integer.compare(g2.getOnline(), g1.getOnline())).collect(Collectors.toList());
-    AbstractSkyWars game = games.stream().findFirst().orElse(null);
+    TnTGameAb game = games.stream().findFirst().orElse(null);
     if (game != null && game.getOnline() == 0) {
       game = games.get(ThreadLocalRandom.current().nextInt(games.size()));
     }
@@ -193,11 +193,11 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
     return game;
   }
   
-  public static Map<String, List<AbstractSkyWars>> getAsMap(SkyWarsMode mode) {
-    Map<String, List<AbstractSkyWars>> result = new HashMap<>();
+  public static Map<String, List<TnTGameAb>> getAsMap(TnTGameMode mode) {
+    Map<String, List<TnTGameAb>> result = new HashMap<>();
     GAMES.values().stream().filter(game -> game.getMode().equals(mode) && game.getState().canJoin()
         && game.getOnline() < game.getMaxPlayers()).forEach(game -> {
-      List<AbstractSkyWars> list = result.computeIfAbsent(game.getMapName(), k -> new ArrayList<>());
+      List<TnTGameAb> list = result.computeIfAbsent(game.getMapName(), k -> new ArrayList<>());
       
       if (game.getState().canJoin() && game.getOnline() < game.getMaxPlayers()) {
         list.add(game);
@@ -207,7 +207,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
     return result;
   }
   
-  public static List<AbstractSkyWars> listByMode(SkyWarsMode mode) {
+  public static List<TnTGameAb> listByMode(TnTGameMode mode) {
     return GAMES.values().stream().filter(sw -> sw.getMode().equals(mode))
         .collect(Collectors.toList());
   }
@@ -259,7 +259,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
     spectators.add(player.getUniqueId());
     
     player.teleport(target.getLocation());
-    SWCoreHook.reloadScoreboard(profile);
+    TNTCoreHook.reloadScoreboard(profile);
     for (Player players : Bukkit.getOnlinePlayers()) {
       if (!players.getWorld().equals(player.getWorld())) {
         player.hidePlayer(players);
@@ -294,7 +294,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
       return;
     }
     
-    SkyWarsTeam team = null;
+    TnTGameTeam team = null;
     boolean fullSize = false;
     BukkitParty party = BukkitPartyManager.getMemberParty(player.getName());
     if (party != null) {
@@ -336,7 +336,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
 
 
     player.teleport(team.getLocation());
-    SWCoreHook.reloadScoreboard(profile);
+    TNTCoreHook.reloadScoreboard(profile);
     
     profile.setHotbar(Hotbar.getHotbarById("waiting"));
     profile.refresh();
@@ -379,7 +379,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
       return;
     }
     
-    SkyWarsTeam team = this.getTeam(player);
+    TnTGameTeam team = this.getTeam(player);
     
     boolean alive = this.players.contains(player.getUniqueId());
     this.players.remove(player.getUniqueId());
@@ -442,7 +442,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
     }
     profile.setGame(null);
     TagUtils.setTag(player);
-    SWCoreHook.reloadScoreboard(profile);
+    TNTCoreHook.reloadScoreboard(profile);
     profile.setHotbar(Hotbar.getHotbarById("lobby"));
     profile.refresh();
     if (this.state == GameState.AGUARDANDO) {
@@ -457,12 +457,12 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
     this.state = GameState.EMJOGO;
     this.task.swap(null);
 
-    this.listTeams().forEach(SkyWarsTeam::startGame);
+    this.listTeams().forEach(TnTGameTeam::startGame);
 
     for (Player player : this.listPlayers(false)) {
 
       Profile profile = Profile.getProfile(player.getName());
-      SWCoreHook.reloadScoreboard(profile);
+      TNTCoreHook.reloadScoreboard(profile);
       profile.setHotbar(null);
       profile.addStats("kCoreSkyWars", this.getMode().getStats() + "games");
       if (Main.kClans) {
@@ -499,7 +499,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
       return;
     }
 
-    SkyWarsTeam team = this.getTeam(player);
+    TnTGameTeam team = this.getTeam(player);
     if (team != null) {
       team.removeMember(player);
     }
@@ -559,7 +559,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
       this.broadcastMessage(Language.ingame$broadcast$suicide.replace("{name}", Role.getColored(player.getName())));
       String suffix = this.addKills(pk);
       EnumSound.ORB_PICKUP.play(pk, 1.0F, 1.0F);
-      if (this.getMode() == SkyWarsMode.RANKED) {
+      if (this.getMode() == TnTGameMode.RANKED) {
         killer.addStats("kCoreSkyWars", Language.options$points$kills, "rankedpoints");
       }
       killer.addCoinsWM("kCoreSkyWars", Language.options$coins$kills);
@@ -586,7 +586,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
       return;
     }
     
-    List<SkyWarsTeam> teams = this.listTeams().stream().filter(GameTeam::isAlive).collect(Collectors.toList());
+    List<TnTGameTeam> teams = this.listTeams().stream().filter(GameTeam::isAlive).collect(Collectors.toList());
     if (teams.size() <= 1) {
       this.stop(teams.isEmpty() ? null : teams.get(0));
     }
@@ -595,7 +595,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
   }
   
   @Override
-  public void stop(SkyWarsTeam winners) {
+  public void stop(TnTGameTeam winners) {
     this.state = GameState.ENCERRADO;
     
     StringBuilder name = new StringBuilder();
@@ -614,13 +614,13 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
     if (name.toString().isEmpty()) {
       this.broadcastMessage(Language.ingame$broadcast$end);
     } else {
-      this.broadcastMessage((this.getMode() == SkyWarsMode.SOLO || this.getMode() == SkyWarsMode.RANKED ? Language.ingame$broadcast$win$solo : Language.ingame$broadcast$win$dupla).replace("{name}", name.toString()));
+      this.broadcastMessage((this.getMode() == TnTGameMode.SOLO || this.getMode() == TnTGameMode.RANKED ? Language.ingame$broadcast$win$solo : Language.ingame$broadcast$win$dupla).replace("{name}", name.toString()));
     }
     for (Player player : this.listPlayers(false)) {
       Profile profile = Profile.getProfile(player.getName());
 
       profile.update();
-      SkyWarsTeam team = this.getTeam(player);
+      TnTGameTeam team = this.getTeam(player);
       if (team != null) {
         int coinsWin = (int) (team.equals(winners) ? profile.calculateWM(Language.options$coins$wins) : 0);
         int coinsKill = (int) profile.calculateWM(this.getKills(player) * Language.options$coins$kills);
@@ -640,7 +640,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
                               .replace("{s}", this.getKills(player) > 1 ? "s" : "") :
                           ""));
             }
-            if (totalPoints > 0 && this.getMode().equals(SkyWarsMode.RANKED)) {
+            if (totalPoints > 0 && this.getMode().equals(TnTGameMode.RANKED)) {
               player.sendMessage(
                   Language.ingame$messages$points$base
                       .replace("{points}", StringUtils.formatNumber(totalPoints))
@@ -665,7 +665,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
       
       if (winners != null && winners.hasMember(player)) {
         profile.addCoinsWM("kCoreSkyWars", Language.options$coins$wins);
-        if (this.getMode().equals(SkyWarsMode.RANKED)) {
+        if (this.getMode().equals(TnTGameMode.RANKED)) {
           profile.addStats("kCoreSkyWars", Language.options$points$wins, "rankedpoints");
         }
         if (Main.kClans) {
@@ -702,7 +702,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
     this.players.clear();
     this.spectators.clear();
     this.task.cancel();
-    this.listTeams().forEach(SkyWarsTeam::reset);
+    this.listTeams().forEach(TnTGameTeam::reset);
     addToQueue(this);
   }
   
@@ -711,7 +711,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
       Scoreboard scoreboard = player.getScoreboard();
       
       for (Player players : this.listPlayers()) {
-        SkyWarsTeam gt;
+        TnTGameTeam gt;
         
         if (this.isSpectator(players)) {
           Team team = scoreboard.getEntryTeam(players.getName());
@@ -764,7 +764,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
     this.timer = timer;
   }
   
-  public SkyWarsConfig getConfig() {
+  public TnTGameConfig getConfig() {
     return this.config;
   }
   
@@ -772,7 +772,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
     return this.config.getWorld();
   }
   
-  public SkyWarsTask getTask() {
+  public TnTGameTask getTask() {
     return this.task;
   }
   
@@ -784,7 +784,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
     return this.config.getMapName();
   }
 
-  public SkyWarsMode getMode() {
+  public TnTGameMode getMode() {
     return this.config.getMode();
   }
   
@@ -844,17 +844,17 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
     return this.listTeams().size() * this.getMode().getSize();
   }
 
-  public SkyWarsTeam getAvailableTeam(int teamSize) {
+  public TnTGameTeam getAvailableTeam(int teamSize) {
     return this.listTeams().stream().filter(team -> team.canJoin(teamSize)).findAny().orElse(null);
   }
 
   @Override
-  public SkyWarsTeam getTeam(Player player) {
+  public TnTGameTeam getTeam(Player player) {
     return this.listTeams().stream().filter(team -> team.hasMember(player)).findAny().orElse(null);
   }
 
   public void resetBlock(Block block) {
-    SkyWarsBlock sb = this.blocks.get(BukkitUtils.serializeLocation(block.getLocation()));
+    TnTGameBlock sb = this.blocks.get(BukkitUtils.serializeLocation(block.getLocation()));
     
     if (sb != null) {
       block.setType(sb.getMaterial());
@@ -866,7 +866,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
     }
   }
 
-  public Map<String, SkyWarsBlock> getBlocks() {
+  public Map<String, TnTGameBlock> getBlocks() {
     return this.blocks;
   }
   
@@ -885,7 +885,7 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
     return this.event.getValue().getName() + " " + SDF.format((this.event.getKey() - this.getTimer()) * 1000);
   }
   
-  public Map.Entry<Integer, SkyWarsEvent> getNextEvent() {
+  public Map.Entry<Integer, TnTGameEvent> getNextEvent() {
     return this.nextEvent;
   }
   
@@ -894,14 +894,14 @@ public abstract class AbstractSkyWars implements Game<SkyWarsTeam> {
   }
   
   @Override
-  public List<SkyWarsTeam> listTeams() {
+  public List<TnTGameTeam> listTeams() {
     return this.config.listTeams();
   }
   
 
   
-  public Map<Integer, SkyWarsEvent> listEvents() {
-    return this.getMode() == SkyWarsMode.SOLO ? SkyWarsEvent.SOLO : this.getMode() == SkyWarsMode.RANKED ? SkyWarsEvent.RANKED : SkyWarsEvent.DUPLA;
+  public Map<Integer, TnTGameEvent> listEvents() {
+    return this.getMode() == TnTGameMode.SOLO ? TnTGameEvent.SOLO : this.getMode() == TnTGameMode.RANKED ? TnTGameEvent.RANKED : TnTGameEvent.DUPLA;
   }
 
   @Override
