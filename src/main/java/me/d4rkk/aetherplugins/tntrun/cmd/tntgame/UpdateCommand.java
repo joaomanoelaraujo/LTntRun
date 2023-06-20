@@ -1,4 +1,4 @@
-package me.d4rkk.aetherplugins.tntrun.cmd.sw;
+package me.d4rkk.aetherplugins.tntrun.cmd.tntgame;
 
 import me.d4rkk.aetherplugins.tntrun.cmd.SubCommand;
 import org.bukkit.entity.Player;

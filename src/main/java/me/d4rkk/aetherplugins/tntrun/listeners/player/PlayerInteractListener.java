@@ -7,10 +7,10 @@ import dev.slickcollections.kiwizin.libraries.npclib.api.event.NPCRightClickEven
 import dev.slickcollections.kiwizin.libraries.npclib.api.npc.NPC;
 import dev.slickcollections.kiwizin.menus.MenuDeliveries;
 import dev.slickcollections.kiwizin.player.Profile;
-import me.d4rkk.aetherplugins.tntrun.cmd.sw.BuildCommand;
-import me.d4rkk.aetherplugins.tntrun.cmd.sw.CreateCommand;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
-import me.d4rkk.aetherplugins.tntrun.game.enums.SkyWarsMode;
+import me.d4rkk.aetherplugins.tntrun.cmd.tntgame.BuildCommand;
+import me.d4rkk.aetherplugins.tntrun.cmd.tntgame.CreateCommand;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
+import me.d4rkk.aetherplugins.tntrun.game.enums.TnTGameMode;
 import me.d4rkk.aetherplugins.tntrun.menus.MenuPlay;
 import me.d4rkk.aetherplugins.tntrun.menus.MenuStatsNPC;
 import dev.slickcollections.kiwizin.utils.BukkitUtils;
@@ -36,7 +36,7 @@ public class PlayerInteractListener implements Listener {
     if (profile != null) {
       NPC npc = evt.getNPC();
       if (npc.data().has("play-npc")) {
-        new MenuPlay(profile, SkyWarsMode.fromName(npc.data().get("play-npc")));
+        new MenuPlay(profile, TnTGameMode.fromName(npc.data().get("play-npc")));
       }
     }
   }
@@ -49,7 +49,7 @@ public class PlayerInteractListener implements Listener {
     if (profile != null) {
       NPC npc = evt.getNPC();
       if (npc.data().has("play-npc")) {
-        new MenuPlay(profile, SkyWarsMode.fromName(npc.data().get("play-npc")));
+        new MenuPlay(profile, TnTGameMode.fromName(npc.data().get("play-npc")));
       } else if (npc.data().has("delivery-npc")) {
         new MenuDeliveries(profile);
       } else if (npc.data().has("stats-npc")) {
@@ -70,7 +70,7 @@ public class PlayerInteractListener implements Listener {
           CreateCommand.handleClick(profile, item.getItemMeta().getDisplayName(), evt);
         }
       }
-      AbstractSkyWars game = profile.getGame(AbstractSkyWars.class);
+      TnTGameAb game = profile.getGame(TnTGameAb.class);
       if (game == null && !BuildCommand.hasBuilder(player)) {
         evt.setCancelled(true);
       } else if (game != null && (game.getState() != GameState.EMJOGO || game.isSpectator(player))) {
@@ -99,7 +99,7 @@ public class PlayerInteractListener implements Listener {
       Profile profile = Profile.getProfile(player.getName());
       
       if (profile != null) {
-        AbstractSkyWars game = profile.getGame(AbstractSkyWars.class);
+        TnTGameAb game = profile.getGame(TnTGameAb.class);
         if (game == null) {
           player.teleport(Core.getLobby());
         } else {

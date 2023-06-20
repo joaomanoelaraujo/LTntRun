@@ -5,9 +5,9 @@ import dev.slickcollections.kiwizin.libraries.MinecraftVersion;
 import dev.slickcollections.kiwizin.plugin.KPlugin;
 import me.d4rkk.aetherplugins.tntrun.cmd.Commands;
 import me.d4rkk.aetherplugins.tntrun.cosmetics.Cosmetic;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
-import me.d4rkk.aetherplugins.tntrun.game.object.SkyWarsLeague;
-import me.d4rkk.aetherplugins.tntrun.hook.SWCoreHook;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
+import me.d4rkk.aetherplugins.tntrun.game.object.TnTRunLeague;
+import me.d4rkk.aetherplugins.tntrun.hook.TNTCoreHook;
 import me.d4rkk.aetherplugins.tntrun.listeners.Listeners;
 import me.d4rkk.aetherplugins.tntrun.tagger.TagUtils;
 import dev.slickcollections.kiwizin.utils.BukkitUtils;
@@ -53,11 +53,11 @@ public class Main extends KPlugin {
       Core.setLobby(BukkitUtils.deserializeLocation(getConfig().getString("spawn")));
     }
     
-    AbstractSkyWars.setupGames();
+    TnTGameAb.setupGames();
     Language.setupLanguage();
-    SWCoreHook.setupHook();
+    TNTCoreHook.setupHook();
     Listeners.setupListeners();
-    SkyWarsLeague.setupLeagues();
+    TnTRunLeague.setupLeagues();
     
     Commands.setupCommands();
     

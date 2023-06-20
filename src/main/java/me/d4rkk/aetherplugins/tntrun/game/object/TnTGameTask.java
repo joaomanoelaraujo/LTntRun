@@ -9,9 +9,9 @@ import me.d4rkk.aetherplugins.tntrun.container.SelectedContainer;
 import me.d4rkk.aetherplugins.tntrun.cosmetics.CosmeticType;
 import me.d4rkk.aetherplugins.tntrun.cosmetics.object.AbstractExecutor;
 import me.d4rkk.aetherplugins.tntrun.cosmetics.types.WinAnimation;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
-import me.d4rkk.aetherplugins.tntrun.game.SkyWarsEvent;
-import me.d4rkk.aetherplugins.tntrun.game.SkyWarsTeam;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameEvent;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameTeam;
 import dev.slickcollections.kiwizin.utils.StringUtils;
 import dev.slickcollections.kiwizin.utils.enums.EnumSound;
 import org.bukkit.entity.Entity;
@@ -23,12 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SkyWarsTask {
+public class TnTGameTask {
   
-  private final AbstractSkyWars game;
+  private final TnTGameAb game;
   private BukkitTask task;
   
-  public SkyWarsTask(AbstractSkyWars game) {
+  public TnTGameTask(TnTGameAb game) {
     this.game = game;
   }
   
@@ -89,7 +89,7 @@ public class SkyWarsTask {
     }.runTaskTimer(Main.getInstance(), 0, 20);
   }
   
-  public void swap(SkyWarsTeam winners) {
+  public void swap(TnTGameTeam winners) {
     this.cancel();
     if (this.game.getState() == GameState.EMJOGO) {
       this.game.setTimer(0);
@@ -97,7 +97,7 @@ public class SkyWarsTask {
       this.task = new BukkitRunnable() {
         @Override
         public void run() {
-          Map.Entry<Integer, SkyWarsEvent> entry = game.getNextEvent();
+          Map.Entry<Integer, TnTGameEvent> entry = game.getNextEvent();
           if (entry != null) {
             if (entry.getKey() == game.getTimer()) {
               entry.getValue().execute(game);

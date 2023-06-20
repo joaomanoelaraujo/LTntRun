@@ -1,43 +1,40 @@
 package me.d4rkk.aetherplugins.tntrun.game.object;
 
 import dev.slickcollections.kiwizin.plugin.config.KConfig;
-import dev.slickcollections.kiwizin.utils.BukkitUtils;
 import me.d4rkk.aetherplugins.tntrun.Main;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
-import me.d4rkk.aetherplugins.tntrun.game.SkyWarsTeam;
-import me.d4rkk.aetherplugins.tntrun.game.enums.SkyWarsMode;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameTeam;
+import me.d4rkk.aetherplugins.tntrun.game.enums.TnTGameMode;
 import dev.slickcollections.kiwizin.utils.CubeID;
 import me.d4rkk.aetherplugins.tntrun.utils.VoidChunkGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class SkyWarsConfig {
+public class TnTGameConfig {
   
-  private AbstractSkyWars game;
+  private TnTGameAb game;
   private KConfig config;
   
   private String yaml;
   private World world;
   private String name;
-  private SkyWarsMode mode;
-  private List<SkyWarsTeam> teams;
+  private TnTGameMode mode;
+  private List<TnTGameTeam> teams;
   private CubeID cubeId;
   private final int minPlayers;
-  public SkyWarsConfig(AbstractSkyWars game) {
+  public TnTGameConfig(TnTGameAb game) {
     this.game = game;
     this.yaml = game.getGameName();
     this.config = Main.getInstance().getConfig("arenas", this.yaml);
     this.name = this.config.getString("name");
-    this.mode = SkyWarsMode.fromName(this.config.getString("mode"));
+    this.mode = TnTGameMode.fromName(this.config.getString("mode"));
     this.minPlayers = config.getInt("minPlayers");
     this.cubeId = new CubeID(config.getString("cubeId"));
     this.teams = new ArrayList<>();
@@ -45,7 +42,7 @@ public class SkyWarsConfig {
   }
 
   public void setupSpawns() {
-    this.config.getStringList("spawns").forEach(spawns -> this.teams.add(new SkyWarsTeam(this.game, spawns, this.mode.getSize())));
+    this.config.getStringList("spawns").forEach(spawns -> this.teams.add(new TnTGameTeam(this.game, spawns, this.mode.getSize())));
   //  this.teams.add(new SkyWarsTeam(game, this.config.getString("spawns"), this.mode.getSize()));
    // this.teams.add(new SkyWarsTeam(game, this.config.getString("spawn"), this.mode.getSize()));
   }
@@ -127,11 +124,11 @@ public class SkyWarsConfig {
     return this.name;
   }
   
-  public SkyWarsMode getMode() {
+  public TnTGameMode getMode() {
     return this.mode;
   }
   
-  public List<SkyWarsTeam> listTeams() {
+  public List<TnTGameTeam> listTeams() {
     return this.teams;
   }
 

@@ -3,8 +3,8 @@ package me.d4rkk.aetherplugins.tntrun.listeners.player;
 import dev.slickcollections.kiwizin.player.Profile;
 import dev.slickcollections.kiwizin.player.role.Role;
 import me.d4rkk.aetherplugins.tntrun.Language;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
-import me.d4rkk.aetherplugins.tntrun.game.object.SkyWarsLeague;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
+import me.d4rkk.aetherplugins.tntrun.game.object.TnTRunLeague;
 import dev.slickcollections.kiwizin.utils.StringUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -61,9 +61,9 @@ public class AsyncPlayerChatListener implements Listener {
     }
     
     Profile profile = Profile.getProfile(player.getName());
-    AbstractSkyWars game = profile.getGame(AbstractSkyWars.class);
+    TnTGameAb game = profile.getGame(TnTGameAb.class);
     if (game == null || !game.isSpectator(player)) {
-      String symbolColored = StringUtils.getFirstColor(SkyWarsLeague.getLeague(profile).getTag()) + "[" + SkyWarsLeague.getLeague(profile).getSymbol() + "]";
+      String symbolColored = StringUtils.getFirstColor(TnTRunLeague.getLeague(profile).getTag()) + "[" + TnTRunLeague.getLeague(profile).getSymbol() + "]";
       evt.setFormat(
           Language.chat$format$lobby.replace("{player}", role.getPrefix() + "%s").replace("{league}", symbolColored).replace("{color}", role.isDefault() ? Language.chat$color$default : Language.chat$color$custom)
               .replace("{message}", "%s"));

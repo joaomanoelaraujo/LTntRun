@@ -2,8 +2,8 @@ package me.d4rkk.aetherplugins.tntrun.listeners.player;
 
 import dev.slickcollections.kiwizin.game.GameState;
 import dev.slickcollections.kiwizin.player.Profile;
-import me.d4rkk.aetherplugins.tntrun.cmd.sw.BuildCommand;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
+import me.d4rkk.aetherplugins.tntrun.cmd.tntgame.BuildCommand;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,7 +19,7 @@ public class InventoryClickListener implements Listener {
       Profile profile = Profile.getProfile(player.getName());
       
       if (profile != null) {
-        AbstractSkyWars game = profile.getGame(AbstractSkyWars.class);
+        TnTGameAb game = profile.getGame(TnTGameAb.class);
         if (game == null) {
           evt.setCancelled(!BuildCommand.hasBuilder(player));
         } else if (game.isSpectator(player) || game.getState() != GameState.EMJOGO) {

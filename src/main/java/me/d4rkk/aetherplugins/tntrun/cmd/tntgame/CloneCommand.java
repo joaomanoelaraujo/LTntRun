@@ -1,9 +1,9 @@
-package me.d4rkk.aetherplugins.tntrun.cmd.sw;
+package me.d4rkk.aetherplugins.tntrun.cmd.tntgame;
 
 import dev.slickcollections.kiwizin.plugin.config.KConfig;
 import me.d4rkk.aetherplugins.tntrun.Main;
 import me.d4rkk.aetherplugins.tntrun.cmd.SubCommand;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
 import org.bukkit.command.CommandSender;
 
 import java.io.File;
@@ -24,14 +24,14 @@ public class CloneCommand extends SubCommand {
       return;
     }
     
-    AbstractSkyWars game = AbstractSkyWars.getByWorldName(args[0]);
+    TnTGameAb game = TnTGameAb.getByWorldName(args[0]);
     if (game == null) {
       sender.sendMessage("§cNão existe uma sala neste mundo.");
       return;
     }
     
     String newWorld = args[1];
-    if (AbstractSkyWars.getByWorldName(newWorld) != null) {
+    if (TnTGameAb.getByWorldName(newWorld) != null) {
       sender.sendMessage("§cJá existe uma sala no mundo \"" + newWorld + "\".");
       return;
     }
@@ -54,6 +54,6 @@ public class CloneCommand extends SubCommand {
     }
     
     Main.getInstance().getFileUtils().copyFiles(new File("plugins/kSkyWars/mundos", args[0]), new File("plugins/kSkyWars/mundos", newWorld));
-    AbstractSkyWars.load(config.getFile(), () -> sender.sendMessage("§aSala foi clonada."));
+    TnTGameAb.load(config.getFile(), () -> sender.sendMessage("§aSala foi clonada."));
   }
 }

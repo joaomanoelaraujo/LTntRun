@@ -4,8 +4,8 @@ import dev.slickcollections.kiwizin.libraries.menu.UpdatablePlayerMenu;
 import dev.slickcollections.kiwizin.player.Profile;
 import me.d4rkk.aetherplugins.tntrun.Language;
 import me.d4rkk.aetherplugins.tntrun.Main;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
-import me.d4rkk.aetherplugins.tntrun.game.enums.SkyWarsMode;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
+import me.d4rkk.aetherplugins.tntrun.game.enums.TnTGameMode;
 import dev.slickcollections.kiwizin.utils.BukkitUtils;
 import dev.slickcollections.kiwizin.utils.StringUtils;
 import dev.slickcollections.kiwizin.utils.enums.EnumSound;
@@ -19,9 +19,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class MenuPlay extends UpdatablePlayerMenu {
   
-  private final SkyWarsMode mode;
+  private final TnTGameMode mode;
   
-  public MenuPlay(Profile profile, SkyWarsMode mode) {
+  public MenuPlay(Profile profile, TnTGameMode mode) {
     super(profile.getPlayer(), "TnT " + mode.getName(), !"hentai".equals("hentai") ? 4 : 3);
     this.mode = mode;
     
@@ -48,7 +48,7 @@ public class MenuPlay extends UpdatablePlayerMenu {
           if (item != null && item.getType() != Material.AIR) {
             if (evt.getSlot() == 13) {
               EnumSound.ITEM_PICKUP.play(this.player, 0.5F, 2.0F);
-              AbstractSkyWars game = AbstractSkyWars.findRandom(this.mode);
+              TnTGameAb game = TnTGameAb.findRandom(this.mode);
               if (game != null) {
                 this.player.sendMessage(Language.lobby$npc$play$connect);
                 game.join(profile);
@@ -63,8 +63,8 @@ public class MenuPlay extends UpdatablePlayerMenu {
   @Override
   public void update() {
 
-    int waiting = AbstractSkyWars.getWaiting(this.mode);
-    int playing = AbstractSkyWars.getPlaying(this.mode);
+    int waiting = TnTGameAb.getWaiting(this.mode);
+    int playing = TnTGameAb.getPlaying(this.mode);
     
     this.setItem(13, BukkitUtils.deserializeItemStack("TNT : 1 : nome>&aTnt : desc>\n&fEm espera: &7" + StringUtils.formatNumber(waiting) + "\n&fJogando: &7" + StringUtils.formatNumber(playing) + "\n \n&eClique para jogar!"));
 

@@ -5,7 +5,7 @@ import dev.slickcollections.kiwizin.plugin.config.KConfig;
 import me.d4rkk.aetherplugins.tntrun.Language;
 import me.d4rkk.aetherplugins.tntrun.Main;
 import me.d4rkk.aetherplugins.tntrun.game.interfaces.LoadCallback;
-import me.d4rkk.aetherplugins.tntrun.game.object.SkyWarsBlock;
+import me.d4rkk.aetherplugins.tntrun.game.object.TnTGameBlock;
 import dev.slickcollections.kiwizin.utils.BukkitUtils;
 import dev.slickcollections.kiwizin.utils.CubeID;
 import org.bukkit.Material;
@@ -18,15 +18,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars.QUEUE;
+import static me.d4rkk.aetherplugins.tntrun.game.TnTGameAb.QUEUE;
 
 public class ArenaRollbackerTask extends BukkitRunnable {
   
   private boolean locked;
-  private AbstractSkyWars rollbacking;
+  private TnTGameAb rollbacking;
   private CubeID.CubeIterator iterator;
 
-  public static void scan(AbstractSkyWars game, KConfig config, LoadCallback callback) {
+  public static void scan(TnTGameAb game, KConfig config, LoadCallback callback) {
     new BukkitRunnable() {
 
       final List<String> blocks = new ArrayList<>();
@@ -39,7 +39,7 @@ public class ArenaRollbackerTask extends BukkitRunnable {
           Block block = this.iterator.next();
           if (block.getType() != Material.AIR) {
             String location = BukkitUtils.serializeLocation(block.getLocation());
-            game.getBlocks().put(location, new SkyWarsBlock(block.getType(), block.getData()));
+            game.getBlocks().put(location, new TnTGameBlock(block.getType(), block.getData()));
             blocks.add(location + " : " + block.getType().name() + ", " + block.getData());
           }
 

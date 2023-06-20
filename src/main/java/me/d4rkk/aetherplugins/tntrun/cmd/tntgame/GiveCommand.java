@@ -1,4 +1,4 @@
-package me.d4rkk.aetherplugins.tntrun.cmd.sw;
+package me.d4rkk.aetherplugins.tntrun.cmd.tntgame;
 
 import dev.slickcollections.kiwizin.booster.Booster.BoosterType;
 import dev.slickcollections.kiwizin.player.Profile;

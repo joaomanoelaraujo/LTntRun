@@ -10,11 +10,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-public abstract class SkyWarsEvent {
+public abstract class TnTGameEvent {
   
-  public static final Map<Integer, SkyWarsEvent> SOLO = new LinkedHashMap<>(), DUPLA = new LinkedHashMap<>(), RANKED = new LinkedHashMap<>();
+  public static final Map<Integer, TnTGameEvent> SOLO = new LinkedHashMap<>(), DUPLA = new LinkedHashMap<>(), RANKED = new LinkedHashMap<>();
   public static KLogger LOGGER = ((KLogger) Main.getInstance().getLogger()).getModule("EVENTS");
-  private static SkyWarsEvent END_EVENT, ANNOUNCE_EVENT;
+  private static TnTGameEvent END_EVENT, ANNOUNCE_EVENT;
 
   public static void setupEvents() {
     END_EVENT = new EndEvent();
@@ -27,7 +27,7 @@ public abstract class SkyWarsEvent {
         continue;
       }
       
-      SOLO.put((int) event[0], (SkyWarsEvent) event[1]);
+      SOLO.put((int) event[0], (TnTGameEvent) event[1]);
     }
     
     for (String evt : Language.options$events$ranked$timings) {
@@ -37,7 +37,7 @@ public abstract class SkyWarsEvent {
         continue;
       }
       
-      RANKED.put((int) event[0], (SkyWarsEvent) event[1]);
+      RANKED.put((int) event[0], (TnTGameEvent) event[1]);
     }
     
     for (String evt : Language.options$events$dupla$timings) {
@@ -47,7 +47,7 @@ public abstract class SkyWarsEvent {
         continue;
       }
       
-      DUPLA.put((int) event[0], (SkyWarsEvent) event[1]);
+      DUPLA.put((int) event[0], (TnTGameEvent) event[1]);
     }
   }
 
@@ -78,7 +78,7 @@ public abstract class SkyWarsEvent {
     return null;
   }
   
-  public abstract void execute(AbstractSkyWars game);
+  public abstract void execute(TnTGameAb game);
   
   public abstract String getName();
 }

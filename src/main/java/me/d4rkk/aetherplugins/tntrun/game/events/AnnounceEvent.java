@@ -2,15 +2,15 @@ package me.d4rkk.aetherplugins.tntrun.game.events;
 
 import dev.slickcollections.kiwizin.nms.NMS;
 import me.d4rkk.aetherplugins.tntrun.Language;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
-import me.d4rkk.aetherplugins.tntrun.game.SkyWarsEvent;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameEvent;
 import dev.slickcollections.kiwizin.utils.StringUtils;
 import dev.slickcollections.kiwizin.utils.enums.EnumSound;
 
-public class AnnounceEvent extends SkyWarsEvent {
+public class AnnounceEvent extends TnTGameEvent {
   
   @Override
-  public void execute(AbstractSkyWars game) {
+  public void execute(TnTGameAb game) {
     int minutes = game.getTimeUntilEvent() / 60;
     
     game.listPlayers(false).forEach(player -> {

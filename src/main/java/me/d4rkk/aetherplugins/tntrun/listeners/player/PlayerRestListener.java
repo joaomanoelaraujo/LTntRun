@@ -3,9 +3,9 @@ package me.d4rkk.aetherplugins.tntrun.listeners.player;
 import dev.slickcollections.kiwizin.game.GameState;
 import dev.slickcollections.kiwizin.player.Profile;
 import me.d4rkk.aetherplugins.tntrun.Main;
-import me.d4rkk.aetherplugins.tntrun.cmd.sw.BuildCommand;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
-import me.d4rkk.aetherplugins.tntrun.game.enums.SkyWarsMode;
+import me.d4rkk.aetherplugins.tntrun.cmd.tntgame.BuildCommand;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
+import me.d4rkk.aetherplugins.tntrun.game.enums.TnTGameMode;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -25,7 +25,7 @@ public class PlayerRestListener implements Listener {
   public void onPlayerDropItem(PlayerDropItemEvent evt) {
     Profile profile = Profile.getProfile(evt.getPlayer().getName());
     if (profile != null) {
-      AbstractSkyWars game = profile.getGame(AbstractSkyWars.class);
+      TnTGameAb game = profile.getGame(TnTGameAb.class);
       if (game == null) {
         evt.setCancelled(true);
       } else {
@@ -43,8 +43,8 @@ public class PlayerRestListener implements Listener {
         Block blockAbove = player.getLocation().getBlock();
         Block blockBelow = blockAbove.getLocation().subtract(0, 1, 0).getBlock();
         Profile profile = Profile.getProfile(player.getName());
-        AbstractSkyWars game = profile.getGame(AbstractSkyWars.class);
-        if (game != null && game.getState() == GameState.EMJOGO && game.getMode() == SkyWarsMode.SOLO) {
+        TnTGameAb game = profile.getGame(TnTGameAb.class);
+        if (game != null && game.getState() == GameState.EMJOGO && game.getMode() == TnTGameMode.SOLO) {
           if (isRemovableBlock(blockAbove.getType()) || isRemovableBlock(blockBelow.getType())) {
 
             Bukkit.getScheduler().runTaskLater(Main.getInstance(), new BukkitRunnable() {
@@ -68,7 +68,7 @@ public class PlayerRestListener implements Listener {
   public void onPlayerPickupItem(PlayerPickupItemEvent evt) {
     Profile profile = Profile.getProfile(evt.getPlayer().getName());
     if (profile != null) {
-      AbstractSkyWars game = profile.getGame(AbstractSkyWars.class);
+      TnTGameAb game = profile.getGame(TnTGameAb.class);
       if (game == null) {
         evt.setCancelled(true);
       } else {
@@ -81,7 +81,7 @@ public class PlayerRestListener implements Listener {
   public void onBlockBreak(BlockBreakEvent evt) {
     Profile profile = Profile.getProfile(evt.getPlayer().getName());
     if (profile != null) {
-      AbstractSkyWars game = profile.getGame(AbstractSkyWars.class);
+      TnTGameAb game = profile.getGame(TnTGameAb.class);
       if (game == null) {
         evt.setCancelled(!BuildCommand.hasBuilder(evt.getPlayer()));
       } else {
@@ -98,7 +98,7 @@ public class PlayerRestListener implements Listener {
   public void onBlockPlace(BlockPlaceEvent evt) {
     Profile profile = Profile.getProfile(evt.getPlayer().getName());
     if (profile != null) {
-      AbstractSkyWars game = profile.getGame(AbstractSkyWars.class);
+      TnTGameAb game = profile.getGame(TnTGameAb.class);
       if (game == null) {
         evt.setCancelled(!BuildCommand.hasBuilder(evt.getPlayer()));
       } else {

@@ -4,8 +4,8 @@ import dev.slickcollections.kiwizin.libraries.menu.UpdatablePlayerPagedMenu;
 import dev.slickcollections.kiwizin.player.Profile;
 import me.d4rkk.aetherplugins.tntrun.Language;
 import me.d4rkk.aetherplugins.tntrun.Main;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
-import me.d4rkk.aetherplugins.tntrun.game.enums.SkyWarsMode;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
+import me.d4rkk.aetherplugins.tntrun.game.enums.TnTGameMode;
 import dev.slickcollections.kiwizin.utils.BukkitUtils;
 import dev.slickcollections.kiwizin.utils.TimeUtils;
 import dev.slickcollections.kiwizin.utils.enums.EnumSound;
@@ -25,12 +25,12 @@ import java.util.Map;
 public class MenuMapSelector extends UpdatablePlayerPagedMenu {
   
   private Profile profile;
-  private SkyWarsMode mode;
+  private TnTGameMode mode;
   private boolean can = true;
   private Map<ItemStack, String> maps = new HashMap<>();
-  private Map<String, List<AbstractSkyWars>> games = new HashMap<>();
+  private Map<String, List<TnTGameAb>> games = new HashMap<>();
   
-  public MenuMapSelector(Profile profile, SkyWarsMode mode) {
+  public MenuMapSelector(Profile profile, TnTGameMode mode) {
     super(profile.getPlayer(), "Mapas - SkyWars " + mode.getName(), 6);
     this.profile = profile;
     this.mode = mode;
@@ -70,7 +70,7 @@ public class MenuMapSelector extends UpdatablePlayerPagedMenu {
               String mapName = this.maps.get(item);
               if (mapName != null && this.can) {
                 EnumSound.ITEM_PICKUP.play(this.player, 0.5F, 2.0F);
-                for (AbstractSkyWars game : this.games.get(mapName)) {
+                for (TnTGameAb game : this.games.get(mapName)) {
                   if (game.getState().canJoin() && game.getOnline() < game.getMaxPlayers()) {
                     this.player.sendMessage(Language.lobby$npc$play$connect);
                     this.profile.setStats("kCoreSkyWars", System.currentTimeMillis() + TimeUtils.getExpireIn(1), "lastmap");
@@ -93,9 +93,9 @@ public class MenuMapSelector extends UpdatablePlayerPagedMenu {
     }
     
     List<ItemStack> items = new ArrayList<>();
-    this.games = AbstractSkyWars.getAsMap(this.mode);
-    for (Map.Entry<String, List<AbstractSkyWars>> entry : this.games.entrySet()) {
-      List<AbstractSkyWars> games = entry.getValue();
+    this.games = TnTGameAb.getAsMap(this.mode);
+    for (Map.Entry<String, List<TnTGameAb>> entry : this.games.entrySet()) {
+      List<TnTGameAb> games = entry.getValue();
       ItemStack item = BukkitUtils.deserializeItemStack("EMPTY_MAP : 1 : nome>&b" + entry.getKey() + " : desc>&8Modo " + this.mode.getName() + "\n \n&7Salas disponíveis: &a" + games
           .size() + "\n \n&eClique com o botão esquerdo para jogar!");
       items.add(item);

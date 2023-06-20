@@ -1,12 +1,12 @@
-package me.d4rkk.aetherplugins.tntrun.cmd.sw;
+package me.d4rkk.aetherplugins.tntrun.cmd.tntgame;
 
 import dev.slickcollections.kiwizin.player.Profile;
 import dev.slickcollections.kiwizin.player.hotbar.Hotbar;
 import dev.slickcollections.kiwizin.plugin.config.KConfig;
 import me.d4rkk.aetherplugins.tntrun.Main;
 import me.d4rkk.aetherplugins.tntrun.cmd.SubCommand;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
-import me.d4rkk.aetherplugins.tntrun.game.enums.SkyWarsMode;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
+import me.d4rkk.aetherplugins.tntrun.game.enums.TnTGameMode;
 import dev.slickcollections.kiwizin.utils.BukkitUtils;
 import dev.slickcollections.kiwizin.utils.CubeID;
 import dev.slickcollections.kiwizin.utils.StringUtils;
@@ -17,9 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class CreateCommand extends SubCommand {
@@ -93,7 +91,7 @@ public class CreateCommand extends SubCommand {
           
           profile.setHotbar(Hotbar.getHotbarById("lobby"));
           profile.refresh();
-          AbstractSkyWars.load(config.getFile(), () -> player.sendMessage("§aSala criada com sucesso."));
+          TnTGameAb.load(config.getFile(), () -> player.sendMessage("§aSala criada com sucesso."));
         }, 60);
         break;
       }
@@ -102,7 +100,7 @@ public class CreateCommand extends SubCommand {
   
   @Override
   public void perform(Player player, String[] args) {
-    if (AbstractSkyWars.getByWorldName(player.getWorld().getName()) != null) {
+    if (TnTGameAb.getByWorldName(player.getWorld().getName()) != null) {
       player.sendMessage("§cJá existe uma sala neste mundo.");
       return;
     }
@@ -112,7 +110,7 @@ public class CreateCommand extends SubCommand {
       return;
     }
     
-    SkyWarsMode mode = SkyWarsMode.fromName(args[0]);
+    TnTGameMode mode = TnTGameMode.fromName(args[0]);
     if (mode == null) {
       player.sendMessage("§cUtilize /sw " + this.getUsage());
       return;

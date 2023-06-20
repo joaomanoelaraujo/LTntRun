@@ -1,7 +1,7 @@
-package me.d4rkk.aetherplugins.tntrun.cmd.sw;
+package me.d4rkk.aetherplugins.tntrun.cmd.tntgame;
 
 import me.d4rkk.aetherplugins.tntrun.cmd.SubCommand;
-import me.d4rkk.aetherplugins.tntrun.game.enums.SkyWarsMode;
+import me.d4rkk.aetherplugins.tntrun.game.enums.TnTGameMode;
 import me.d4rkk.aetherplugins.tntrun.lobby.PlayNPC;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -32,7 +32,7 @@ public class NPCPlayCommand extends SubCommand {
         return;
       }
       
-      SkyWarsMode mode = SkyWarsMode.fromName(args[2]);
+      TnTGameMode mode = TnTGameMode.fromName(args[2]);
       if (mode == null) {
         player.sendMessage("§cUtilize /sw npcjogar adicionar [id] [solo/dupla]");
         return;

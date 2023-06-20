@@ -2,18 +2,18 @@ package me.d4rkk.aetherplugins.tntrun.cmd;
 
 import me.d4rkk.aetherplugins.tntrun.Main;
 
-import me.d4rkk.aetherplugins.tntrun.cmd.sw.*;
+import me.d4rkk.aetherplugins.tntrun.cmd.tntgame.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SkyWarsCommand extends Commands {
+public class TnTGameCommand extends Commands {
   
   private final List<SubCommand> commands = new ArrayList<>();
   
-  public SkyWarsCommand() {
+  public TnTGameCommand() {
     super("sw", "skywars");
     
     this.commands.add(new UpdateCommand());

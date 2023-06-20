@@ -1,13 +1,13 @@
 package me.d4rkk.aetherplugins.tntrun.game.events;
 
 import me.d4rkk.aetherplugins.tntrun.Language;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
-import me.d4rkk.aetherplugins.tntrun.game.SkyWarsEvent;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameEvent;
 
-public class EndEvent extends SkyWarsEvent {
+public class EndEvent extends TnTGameEvent {
   
   @Override
-  public void execute(AbstractSkyWars game) {
+  public void execute(TnTGameAb game) {
     game.stop(null);
   }
   

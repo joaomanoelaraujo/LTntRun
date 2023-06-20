@@ -7,8 +7,8 @@ import dev.slickcollections.kiwizin.libraries.npclib.api.npc.NPC;
 import dev.slickcollections.kiwizin.plugin.config.KConfig;
 import me.d4rkk.aetherplugins.tntrun.Language;
 import me.d4rkk.aetherplugins.tntrun.Main;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
-import me.d4rkk.aetherplugins.tntrun.game.enums.SkyWarsMode;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
+import me.d4rkk.aetherplugins.tntrun.game.enums.TnTGameMode;
 import me.d4rkk.aetherplugins.tntrun.lobby.trait.NPCSkinTrait;
 import dev.slickcollections.kiwizin.utils.BukkitUtils;
 import dev.slickcollections.kiwizin.utils.StringUtils;
@@ -25,12 +25,12 @@ public class PlayNPC {
   private static final KConfig CONFIG = Main.getInstance().getConfig("npcs");
   private static final List<PlayNPC> NPCS = new ArrayList<>();
   private String id;
-  private SkyWarsMode mode;
+  private TnTGameMode mode;
   private Location location;
   private NPC npc;
   private Hologram hologram;
   
-  public PlayNPC(Location location, String id, SkyWarsMode mode) {
+  public PlayNPC(Location location, String id, TnTGameMode mode) {
     this.location = location;
     this.id = id;
     this.mode = mode;
@@ -49,7 +49,7 @@ public class PlayNPC {
     for (String serialized : CONFIG.getStringList("play")) {
       if (serialized.split("; ").length > 6) {
         String id = serialized.split("; ")[6];
-        SkyWarsMode mode = SkyWarsMode.fromName(serialized.split("; ")[7]);
+        TnTGameMode mode = TnTGameMode.fromName(serialized.split("; ")[7]);
         if (mode == null) {
           continue;
         }
@@ -61,7 +61,7 @@ public class PlayNPC {
     Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), () -> listNPCs().forEach(PlayNPC::update), 20, 20);
   }
   
-  public static void add(String id, Location location, SkyWarsMode mode) {
+  public static void add(String id, Location location, TnTGameMode mode) {
     NPCS.add(new PlayNPC(location, id, mode));
     List<String> list = CONFIG.getStringList("play");
     list.add(BukkitUtils.serializeLocation(location) + "; " + id + "; " + mode);
@@ -97,17 +97,17 @@ public class PlayNPC {
     }
     
     this.hologram = HologramLibrary.createHologram(this.location.clone().add(0, 0.5, 0));
-    for (int index = (this.mode == SkyWarsMode.SOLO ? Language.lobby$npc$play$solo$hologram.size() : (this.mode == SkyWarsMode.RANKED ? Language.lobby$npc$play$ranked$hologram.size() : Language.lobby$npc$play$dupla$hologram.size())); index > 0; index--) {
-      this.hologram.withLine((this.mode == SkyWarsMode.SOLO ? Language.lobby$npc$play$solo$hologram : this.mode == SkyWarsMode.RANKED ? Language.lobby$npc$play$ranked$hologram : Language.lobby$npc$play$dupla$hologram).get(index - 1).replace("{players}",
-          StringUtils.formatNumber(AbstractSkyWars.getWaiting(this.mode) + AbstractSkyWars.getPlaying(this.mode))));
+    for (int index = (this.mode == TnTGameMode.SOLO ? Language.lobby$npc$play$solo$hologram.size() : (this.mode == TnTGameMode.RANKED ? Language.lobby$npc$play$ranked$hologram.size() : Language.lobby$npc$play$dupla$hologram.size())); index > 0; index--) {
+      this.hologram.withLine((this.mode == TnTGameMode.SOLO ? Language.lobby$npc$play$solo$hologram : this.mode == TnTGameMode.RANKED ? Language.lobby$npc$play$ranked$hologram : Language.lobby$npc$play$dupla$hologram).get(index - 1).replace("{players}",
+          StringUtils.formatNumber(TnTGameAb.getWaiting(this.mode) + TnTGameAb.getPlaying(this.mode))));
     }
     
     this.npc = NPCLibrary.createNPC(EntityType.PLAYER, "§8[NPC] ");
     this.npc.data().set("play-npc", this.mode.name());
     this.npc.data().set(NPC.HIDE_BY_TEAMS_KEY, true);
-    if (this.mode == SkyWarsMode.SOLO) {
+    if (this.mode == TnTGameMode.SOLO) {
       this.npc.addTrait(new NPCSkinTrait(this.npc, Language.lobby$npc$play$solo$skin$value, Language.lobby$npc$play$solo$skin$signature));
-    } else if (this.mode == SkyWarsMode.RANKED) {
+    } else if (this.mode == TnTGameMode.RANKED) {
       this.npc.addTrait(new NPCSkinTrait(this.npc, Language.lobby$npc$play$ranked$skin$value, Language.lobby$npc$play$ranked$skin$signature));
     } else {
       this.npc.addTrait(new NPCSkinTrait(this.npc, Language.lobby$npc$play$dupla$skin$value, Language.lobby$npc$play$dupla$skin$signature));
@@ -117,10 +117,10 @@ public class PlayNPC {
   }
   
   public void update() {
-    int size = this.mode == SkyWarsMode.SOLO ? Language.lobby$npc$play$solo$hologram.size() : Language.lobby$npc$play$dupla$hologram.size();
+    int size = this.mode == TnTGameMode.SOLO ? Language.lobby$npc$play$solo$hologram.size() : Language.lobby$npc$play$dupla$hologram.size();
     for (int index = size; index > 0; index--) {
-      this.hologram.updateLine(size - (index - 1), (this.mode == SkyWarsMode.SOLO ? Language.lobby$npc$play$solo$hologram : this.mode == SkyWarsMode.RANKED ? Language.lobby$npc$play$ranked$hologram : Language.lobby$npc$play$dupla$hologram).get(index - 1)
-          .replace("{players}", StringUtils.formatNumber(AbstractSkyWars.getWaiting(this.mode) + AbstractSkyWars.getPlaying(this.mode))));
+      this.hologram.updateLine(size - (index - 1), (this.mode == TnTGameMode.SOLO ? Language.lobby$npc$play$solo$hologram : this.mode == TnTGameMode.RANKED ? Language.lobby$npc$play$ranked$hologram : Language.lobby$npc$play$dupla$hologram).get(index - 1)
+          .replace("{players}", StringUtils.formatNumber(TnTGameAb.getWaiting(this.mode) + TnTGameAb.getPlaying(this.mode))));
     }
   }
   
@@ -143,7 +143,7 @@ public class PlayNPC {
     return id;
   }
   
-  public SkyWarsMode getMode() {
+  public TnTGameMode getMode() {
     return this.mode;
   }
   

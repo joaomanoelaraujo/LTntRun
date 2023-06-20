@@ -7,7 +7,7 @@ import dev.slickcollections.kiwizin.libraries.holograms.api.Hologram;
 import dev.slickcollections.kiwizin.player.Profile;
 import dev.slickcollections.kiwizin.plugin.config.KConfig;
 import me.d4rkk.aetherplugins.tntrun.Main;
-import me.d4rkk.aetherplugins.tntrun.game.object.SkyWarsLeague;
+import me.d4rkk.aetherplugins.tntrun.game.object.TnTRunLeague;
 import me.d4rkk.aetherplugins.tntrun.lobby.leaderboards.KillsLeaderboard;
 import me.d4rkk.aetherplugins.tntrun.lobby.leaderboards.PointsLeaderboard;
 import me.d4rkk.aetherplugins.tntrun.lobby.leaderboards.WinsLeaderboard;
@@ -111,10 +111,10 @@ public abstract class Leaderboard {
     List<String[]> list = this.getSplitted();
     for (String line : this.getHologramLines()) {
       for (int i = 0; i < list.size(); i++) {
-        SkyWarsLeague league = SkyWarsLeague.listLeagues().get(SkyWarsLeague.listLeagues().size() - 1);
+        TnTRunLeague league = TnTRunLeague.listLeagues().get(TnTRunLeague.listLeagues().size() - 1);
         
         if (isPoints() && i < points.size()) {
-          league = SkyWarsLeague.fromPoints(Long.parseLong(points.get(i)[1].
+          league = TnTRunLeague.fromPoints(Long.parseLong(points.get(i)[1].
               replace(".", "").replace(",", "")));
         }
         // Formatar a Liga.

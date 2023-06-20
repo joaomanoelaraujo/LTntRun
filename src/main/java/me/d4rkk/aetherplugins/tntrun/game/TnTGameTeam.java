@@ -2,12 +2,12 @@ package me.d4rkk.aetherplugins.tntrun.game;
 
 import dev.slickcollections.kiwizin.game.GameTeam;
 
-public class SkyWarsTeam extends GameTeam {
+public class TnTGameTeam extends GameTeam {
   
   private final int index;
 
   
-  public SkyWarsTeam(AbstractSkyWars game, String location, int size) {
+  public TnTGameTeam(TnTGameAb game, String location, int size) {
     super(game, location, size);
     this.index = game.listTeams().size();
   }

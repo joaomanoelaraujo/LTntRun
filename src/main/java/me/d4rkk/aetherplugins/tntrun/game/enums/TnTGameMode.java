@@ -1,23 +1,23 @@
 package me.d4rkk.aetherplugins.tntrun.game.enums;
 
 import dev.slickcollections.kiwizin.reflection.Accessors;
-import me.d4rkk.aetherplugins.tntrun.game.AbstractSkyWars;
+import me.d4rkk.aetherplugins.tntrun.game.TnTGameAb;
 import me.d4rkk.aetherplugins.tntrun.game.interfaces.LoadCallback;
-import me.d4rkk.aetherplugins.tntrun.game.types.NormalSkyWars;
+import me.d4rkk.aetherplugins.tntrun.game.types.NormalTnTGame;
 
-public enum SkyWarsMode {
-  RANKED("Ranked", "ranked", 1, NormalSkyWars.class, 1),
-  SOLO("Solo", "1v1", 1, NormalSkyWars.class, 1),
-  DUPLA("Duplas", "2v2", 2, NormalSkyWars.class, 1);
+public enum TnTGameMode {
+  RANKED("Ranked", "ranked", 1, NormalTnTGame.class, 1),
+  SOLO("Solo", "1v1", 1, NormalTnTGame.class, 1),
+  DUPLA("Duplas", "2v2", 2, NormalTnTGame.class, 1);
 
-  private static final SkyWarsMode[] VALUES = values();
+  private static final TnTGameMode[] VALUES = values();
   private final int size;
   private final String stats;
   private final String name;
-  private final Class<? extends AbstractSkyWars> gameClass;
+  private final Class<? extends TnTGameAb> gameClass;
   private final int cosmeticIndex;
 
-  SkyWarsMode(String name, String stats, int size, Class<? extends AbstractSkyWars> gameClass, int cosmeticIndex) {
+  TnTGameMode(String name, String stats, int size, Class<? extends TnTGameAb> gameClass, int cosmeticIndex) {
     this.name = name;
     this.stats = stats;
     this.size = size;
@@ -25,8 +25,8 @@ public enum SkyWarsMode {
     this.cosmeticIndex = cosmeticIndex;
   }
 
-  public static SkyWarsMode fromName(String name) {
-    for (SkyWarsMode mode : VALUES) {
+  public static TnTGameMode fromName(String name) {
+    for (TnTGameMode mode : VALUES) {
       if (name.equalsIgnoreCase(mode.name())) {
         return mode;
       }
@@ -35,7 +35,7 @@ public enum SkyWarsMode {
     return null;
   }
 
-  public AbstractSkyWars buildGame(String name, LoadCallback callback) {
+  public TnTGameAb buildGame(String name, LoadCallback callback) {
     return Accessors.getConstructor(this.gameClass, String.class, LoadCallback.class).newInstance(name, callback);
   }
 

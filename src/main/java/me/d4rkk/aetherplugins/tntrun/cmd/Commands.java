@@ -26,7 +26,7 @@ public abstract class Commands extends Command {
   public static void setupCommands() {
     new SpectateCommand();
     new JoinCommand();
-    new SkyWarsCommand();
+    new TnTGameCommand();
     
   }
   

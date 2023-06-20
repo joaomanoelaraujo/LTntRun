@@ -2,12 +2,12 @@ package me.d4rkk.aetherplugins.tntrun.game.object;
 
 import org.bukkit.Material;
 
-public class SkyWarsBlock {
+public class TnTGameBlock {
   
   private final Material material;
   private final byte data;
   
-  public SkyWarsBlock(Material material, byte data) {
+  public TnTGameBlock(Material material, byte data) {
     this.material = material;
     this.data = data;
   }
